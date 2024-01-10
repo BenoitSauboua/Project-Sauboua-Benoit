@@ -1,0 +1,49 @@
+import json
+import paho.mqtt.client as mqtt
+from influxdb import InfluxDBClient
+import time 
+import random
+ 
+MQTT_BROKER= "localhost"
+MQTT_TOPIC = "topic"
+INFLUXDB_IP = "localhost"
+INFLUXDB_DATABASE = "database"
+ 
+ 
+def on_connect(client, userdata, flags, rc):
+ 
+    print("Connected with result code " + str(rc))
+    client.subscribe(MQTT_TOPIC)
+ 
+ 
+def on_message(client, userdata, msg):
+ 
+    msgrec=str(msg.payload.decode("utf-8"))
+    print(msg.topic+str(msg.payload))
+    data = json.loads(msgrec)
+    values = float(data['valeur'])
+    id_capteur="3732"
+ 
+    
+    json_body = [
+                {
+            "measurement": "measurement",
+            "fields": {
+                "value": values,
+                "id_capt": id_capteur,
+            }
+        }       
+    ]
+    influx_client.write_points(json_body)
+ 
+ 
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect(MQTT_BROKER,1883,60)
+ 
+influx_client = InfluxDBClient(INFLUXDB_IP,8086,"root","root",INFLUXDB_DATABASE)
+influx_client.create_database(INFLUXDB_DATABASE)
+influx_client.switch_database(INFLUXDB_DATABASE)
+ 
+client.loop_forever()

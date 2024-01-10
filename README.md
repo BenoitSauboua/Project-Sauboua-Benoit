@@ -8,7 +8,7 @@ Small project in arduino, it was an amphibious car. You can find bluetooth conne
 
 Second branch: 
 
-VideoGame on C. Creation of a Bomberman video game, the purpose of the game is to control the hero of the game and to break some light wall and to kill the ennemies. I used Clion to program it.
+VideoGame in C. Creation of a Bomberman video game, the purpose of the game is to control the hero of the game and to break some light wall and to kill the ennemies. I used Clion to program it.
 
 Third branch:
 

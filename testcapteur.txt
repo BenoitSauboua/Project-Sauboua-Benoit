@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/adc.h"
+
+#define POT_PIN ADC1_CHANNEL_6 // Broche à laquelle est connecté le potentiomètre
+//#define VOLTAGE_MAX 3.3       // Plage de tension de l'ADC (en volts)
+//#define ADC_RESOLUTION 4095    // Résolution de l'ADC (12 bits pour l'ESP32)
+
+void app_main() {
+    // Configuration de l'ADC
+    adc1_config_width(ADC_WIDTH_BIT_12);
+    adc1_config_channel_atten(POT_PIN, ADC_ATTEN_DB_11);
+
+    while (1) {
+        // Lecture de la valeur brute du potentiomètre
+        int potRawValue = adc1_get_raw(POT_PIN);
+
+        // Conversion de la valeur brute en volts
+        //float potVoltage = (float)potRawValue * VOLTAGE_MAX / ADC_RESOLUTION;
+
+        // Affichage de la valeur en volts
+        printf("Valeur brute %d\n", potRawValue);
+
+        // Temporisation courte (100 ms) pour des lectures plus fréquentes
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
